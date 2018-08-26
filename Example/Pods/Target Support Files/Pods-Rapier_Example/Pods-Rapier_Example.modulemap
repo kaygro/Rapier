@@ -1,0 +1,6 @@
+framework module Pods_Rapier_Example {
+  umbrella header "Pods-Rapier_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

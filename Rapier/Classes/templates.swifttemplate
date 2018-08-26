@@ -1,0 +1,184 @@
+
+<%_ func out(_ test: String){
+_%>	<%= test -%>
+<%_}_%>
+
+<%_
+func outln(_ test: String){
+_%>	<%= test %>
+<%_}_%>
+
+<%
+	var indentationLevel = 0
+	let indentationStep = "    "
+	 
+	func currentIndent()-> String{
+		var ret = ""
+		for _ in 1...indentationLevel{
+			ret += indentationStep
+		}
+		return ret
+	}
+	
+	
+	
+	func outi(_ text: String){
+		let text = currentIndent() + text 
+		out(text)
+	}
+	
+	func outiln(_ string: String){
+		outi(string + "\n")
+	}
+ 
+func indent(_ code: ()->()){
+	indentationLevel += 1
+	code()
+	indentationLevel -= 1
+}
+
+
+func annotated(_ type: Type, _ annotation: String) -> Bool{
+	return type.annotations.keys.contains(annotation)
+}
+
+func parseStringArray(_ string: String)->[String]{
+	let delim = "\"[]"
+	let stringArrayDelim = CharacterSet(charactersIn: delim)
+	let trimmed = string.trimmingCharacters(in: stringArrayDelim)
+	let split = trimmed.split(separator:",", omittingEmptySubsequences: true)
+	return split.map{String($0)}
+}
+
+func dependencies(of type: Type)->[String]{
+	switch type.annotations["dependencies"]{
+		case let deps as [String]:
+			return deps
+		case let dep as String:
+			return parseStringArray(dep)
+		default:
+			return []
+	}
+}
+
+func lowerFirst(_ string: String) -> String{
+	return String(string.lowercased().first!) + string.dropFirst(1)
+}
+
+func upperFirst(_ string: String) -> String{
+	return String(string.uppercased().first!) + string.dropFirst(1)
+}
+
+func protocolName(of dep: String)->String{
+	return upperFirst(dep) + "Protocol"
+}
+
+func implementationName(of string: String) -> String{
+	let suffix = "Protocol"
+	if string.hasSuffix(suffix){
+		return upperFirst(String(string.dropLast(suffix.count)))
+	}
+	return upperFirst(string)
+}
+
+func memberName(of dep: String) -> String{
+	return lowerFirst(implementationName(of: dep))
+}
+
+func hasInjectionInitializers(_ type: Type)->Bool{
+	for ini in type.initializers{
+		if ini.annotations["Inject"] != nil{
+			return true
+		}
+	}
+	return false
+}
+
+func insert(into type: Type,template name: String,code:()->()){
+	outln("//sourcery:inline:auto:\(type.name).\(name)")
+		code()
+	outln("\n//sourcery:end\n")
+}
+
+//constructor and dependencymembers
+let dependentTypes = types.all.filter{annotated($0,"dependencies")}
+
+for type in dependentTypes{
+	insert(into: type,template: "AutoInject"){
+		indent{
+			let typedeps = dependencies(of: type)
+		
+			//dependencyProperties
+			for dep in typedeps{
+				outiln("let \(memberName(of: dep)): \(protocolName(of: dep))") 
+			}
+	
+			var paramList = ""
+			for dependency in typedeps.dropLast(){
+				paramList += memberName(of: dependency) + ": " + protocolName(of: dependency) + ", "
+			}
+			if let last = typedeps.last{
+				paramList += memberName(of: last) + ": " + protocolName(of: last)
+			}
+			outln("//sourcery:Inject")
+			outiln("init(\(paramList)){")
+			indent{
+				//init body
+				for dep in typedeps{
+					outiln("self.\(memberName(of: dep)) = \(protocolName(of: dep))")
+				}
+			}
+			outiln("}")
+		}
+	}
+}
+
+//Appfactory code
+//try to check for single non mock implementations
+let autoCreatables = types.all.filter{annotated($0, "dependencies")}
+let autoResolvables = types.all.filter{$0.kind == "protocol" && hasUniqueImplementation($0) || !$0.kind == "protocol" && autoCreatables.contains($0) }
+
+outln("//We have\(autoCreatable.map{$0.name})")
+var regs = ""
+for type in autoResolvables{
+	regs += "self.container.register(\(type.name).self)"
+	var paramList = ""
+	for dep in dependencies(of: uniqueImplementation(of: type)){
+		paramList += "\(memberName(of: dep)): r.resolve(\(dep).self)!,"  
+	}
+	if paramList.hasSuffix(","){
+		paramList.removeLast(1)
+	}
+	regs += " { r in \(uniqueImplementation(of: type))(\(paramList))}\n"
+}
+
+/*
+let wantsToInject = types.all.filter{hasInjectionInitializers($0)} 
+outln("//annotated types:\(wantsToInject.count)")
+for type in wantsToInject{
+	outln("//\(type.name) can inject into: \(type.initializers.filter{!$0.annotations.isEmpty}.first!.parameters)")
+}
+*/
+
+
+
+
+outln("""
+import Swinject
+open class AppFactory{
+	let container: Container
+	init(){
+		self.container = Container()
+\(regs)
+	}
+	
+	func make<P>(_ imp: P.Type) -> P{
+		return self.container.resolve(P.self)
+	}
+}
+""")
+
+
+//blub
+%>
+
