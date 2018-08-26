@@ -69,8 +69,8 @@ func upperFirst(_ string: String) -> String{
 	return String(string.uppercased().first!) + string.dropFirst(1)
 }
 
-func protocolName(of dep: String)->String{
-	return upperFirst(dep) + "Protocol"
+func memberName(of dep: String) -> String{
+	return lowerFirst(implementationName(of: dep))
 }
 
 func implementationName(of string: String) -> String{
@@ -81,9 +81,11 @@ func implementationName(of string: String) -> String{
 	return upperFirst(string)
 }
 
-func memberName(of dep: String) -> String{
-	return lowerFirst(implementationName(of: dep))
+
+func protocolName(of dep: String)->String{
+	return upperFirst(implementationName(of: dep)) + "Protocol"
 }
+
 
 func hasInjectionInitializers(_ type: Type)->Bool{
 	for ini in type.initializers{
@@ -125,7 +127,7 @@ for type in dependentTypes{
 			indent{
 				//init body
 				for dep in typedeps{
-					outiln("self.\(memberName(of: dep)) = \(protocolName(of: dep))")
+					outiln("self.\(memberName(of: dep)) = \(memberName(of: dep))")
 				}
 			}
 			outiln("}")
@@ -133,23 +135,51 @@ for type in dependentTypes{
 	}
 }
 
+
+
+func uniqueNonMockImplementation(of type: Type)->Type{
+
+		let implementors = types.all.filter{$0.implements[type.name] != nil}
+		let nonMockImplementors = implementors.filter{!$0.name.hasPrefix("Mock")}
+		assert(nonMockImplementors.count == 1)
+		return nonMockImplementors.first!
+	
+	
+}
+
+func hasUniqueNonMockImplementation(_ protocolType: Type)->Bool{
+	let implementors = types.all.filter{$0.implements[protocolType.name] != nil}
+	outln("protocol:\(protocolType.name) has imps:\(implementors.count)")
+	let nonMockImplementors = implementors.filter{!$0.name.hasPrefix("Mock")}
+	return nonMockImplementors.count == 1
+}
+
+func imlementations(of prot: Type)->[Type]{
+	let implementors = types.all.filter{$0.implements[prot.name] != nil}
+	return Array<Type>(implementors)
+}
+
 //Appfactory code
 //try to check for single non mock implementations
+//types.all.forEach{outln($0.name)}
 let autoCreatables = types.all.filter{annotated($0, "dependencies")}
-let autoResolvables = types.all.filter{$0.kind == "protocol" && hasUniqueImplementation($0) || !$0.kind == "protocol" && autoCreatables.contains($0) }
+let autoResolvables = protocols.all.filter{hasUniqueNonMockImplementation($0)}
+// || ($0.kind != "protocol") && autoCreatables.contains($0) }
 
-outln("//We have\(autoCreatable.map{$0.name})")
-var regs = ""
+outln("//We can create\(autoCreatables.map{$0.name})")
+outln("//We can resolve\(autoResolvables.map{$0.name})")
+var regs = [String]()
 for type in autoResolvables{
-	regs += "self.container.register(\(type.name).self)"
+	var reg = "self.container.register(\(type.name).self)"
 	var paramList = ""
-	for dep in dependencies(of: uniqueImplementation(of: type)){
+	for dep in dependencies(of: uniqueNonMockImplementation(of: type)){
 		paramList += "\(memberName(of: dep)): r.resolve(\(dep).self)!,"  
 	}
 	if paramList.hasSuffix(","){
 		paramList.removeLast(1)
 	}
-	regs += " { r in \(uniqueImplementation(of: type))(\(paramList))}\n"
+	reg += " { r in \(uniqueNonMockImplementation(of: type).name)(\(paramList))}"
+	regs.append(reg)
 }
 
 /*
@@ -162,6 +192,8 @@ for type in wantsToInject{
 
 
 
+let regsText = regs.map{"    " + $0 + "\n"}.joined()
+
 
 outln("""
 import Swinject
@@ -169,7 +201,7 @@ open class AppFactory{
 	let container: Container
 	init(){
 		self.container = Container()
-\(regs)
+\(regsText)
 	}
 	
 	func make<P>(_ imp: P.Type) -> P{

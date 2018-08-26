@@ -4,17 +4,23 @@
 
 
 
-//We have["Camera", "Car", "Photographer"]
-//annotated types:1
-//Camera can inject into: []
+
+
+Car
+Event
+Phone
+Photographer
+protocol:Car has imps:0
+protocol:Event has imps:0
+protocol:Phone has imps:0
+protocol:Photographer has imps:0
+//We can create["Car", "Phone", "Photographer"]
+//We can resolve[]
 import Swinject
 open class AppFactory{
 	let container: Container
 	init(){
 		self.container = Container()
-        self.container.register(CameraProtocol.self) { r in Camera()}
-        self.container.register(CarProtocol.self) { r in Car()}
-        self.container.register(PhotographerProtocol.self) { r in Photographer(camera: r.resolve(CameraProtocol.self)!,vehicle: r.resolve(VehicleProtocol.self))}
 
 	}
 	
