@@ -16,18 +16,13 @@ protocol CameraProtocol{
 }
 
 //sourcery:dependencies
-class Phone: Camera{
+class Phone: CameraProtocol{
 	func takePhoto() -> UIImage {
 		print("Click: Phone")
 		return UIImage()
 	}
 
 
-// sourcery:inline:auto:Phone.AutoInject
-//sourcery:Inject
-    init(){
-    }
-// sourcery:end
 }
 
 
@@ -37,11 +32,7 @@ protocol CarProtocol{}
 
 //sourcery:dependencies
 class Car: CarProtocol{
-// sourcery:inline:auto:Car.AutoInject
-//sourcery:Inject
-    init(){
-    }
-// sourcery:end
+
 }
 
 protocol PhotographerProtocol {
@@ -51,22 +42,12 @@ protocol PhotographerProtocol {
 
 //sourcery:dependencies = [CameraProtocol,CarProtocol]
 class Photographer: PhotographerProtocol{
-	func visit(Envent: Event) {
-		print("Going by \(vehicle)")
+	func visit(Event: Event) {
+		print("Going by \(car)")
 	}
 	
 	func takePictures() -> [UIImage] {
 		return [self.camera.takePhoto()]
 	}
 
-
-// sourcery:inline:auto:Photographer.AutoInject
-    let camera: CameraProtocol
-    let car: CarProtocol
-//sourcery:Inject
-    init(camera: CameraProtocol, car: CarProtocol){
-        self.camera = camera
-        self.car = car
-    }
-// sourcery:end
 }

@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Rapier'
-  s.version          = '0.0.0'
-  s.summary          = 'A short description of Rapier.'
+  s.version          = '0.0.1'
+  s.summary          = 'A dependency injection framework for swift.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,14 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+This pods purpose is to reduce the boilerplate that comes with using dependency
+injection. It generates an initializer for constructor/initializer injection
+and class members from a dependencies annotation
+(looks like '//sourcery:dependencies:Prot1,Prot2,...').
+Additionaly you get a generated AppFactory factory class,
+which has a function, that creates an object of a type implementing
+the given protocol. (For that to work, there must be exactly one type implementing
+that protocol, whose name does not begin with Mock.)
                        DESC
 
   s.homepage         = 'https://github.com/kaygro/Rapier'
@@ -30,7 +37,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Rapier/Classes/**/*'
+  s.source_files = 'Rapier/Templates/**/*'
   
   # s.resource_bundles = {
   #   'Rapier' => ['Rapier/Assets/*.png']
@@ -38,5 +45,10 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'Sourcery'
+	s.ios.script_phase = {
+		:name => 'Hello World',
+		:script => 'echo "Hello World"',
+		:execution_position => :before_compile
+	}
 end

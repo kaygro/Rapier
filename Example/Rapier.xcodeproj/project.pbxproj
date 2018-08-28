@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		9B1025377748028A07B30C8E /* Pods_Rapier_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72828E46EA7386E67E13A98 /* Pods_Rapier_Example.framework */; };
+		CAC85D202135D6ED007DF9CA /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC85D1F2135D6EC007DF9CA /* Classes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		BC6BE97AD92BBD00B4B1D74E /* Rapier.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Rapier.podspec; path = ../Rapier.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C5865BBEF67C32944A88C245 /* Pods-Rapier_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rapier_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Rapier_Example/Pods-Rapier_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C72828E46EA7386E67E13A98 /* Pods_Rapier_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rapier_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAC85D1F2135D6EC007DF9CA /* Classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		607FACD21AFB9204008FA782 /* Example for Rapier */ = {
 			isa = PBXGroup;
 			children = (
+				CAC85D1F2135D6EC007DF9CA /* Classes.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -324,6 +327,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				CAC85D202135D6ED007DF9CA /* Classes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

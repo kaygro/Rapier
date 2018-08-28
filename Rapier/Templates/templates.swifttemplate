@@ -142,14 +142,12 @@ func uniqueNonMockImplementation(of type: Type)->Type{
 		let implementors = types.all.filter{$0.implements[type.name] != nil}
 		let nonMockImplementors = implementors.filter{!$0.name.hasPrefix("Mock")}
 		assert(nonMockImplementors.count == 1)
-		return nonMockImplementors.first!
-	
-	
+		return nonMockImplementors.first!	
 }
 
 func hasUniqueNonMockImplementation(_ protocolType: Type)->Bool{
 	let implementors = types.all.filter{$0.implements[protocolType.name] != nil}
-	outln("protocol:\(protocolType.name) has imps:\(implementors.count)")
+	outln("//protocol:\(protocolType.name) has imps:\(implementors.count)")
 	let nonMockImplementors = implementors.filter{!$0.name.hasPrefix("Mock")}
 	return nonMockImplementors.count == 1
 }
@@ -163,8 +161,7 @@ func imlementations(of prot: Type)->[Type]{
 //try to check for single non mock implementations
 //types.all.forEach{outln($0.name)}
 let autoCreatables = types.all.filter{annotated($0, "dependencies")}
-let autoResolvables = protocols.all.filter{hasUniqueNonMockImplementation($0)}
-// || ($0.kind != "protocol") && autoCreatables.contains($0) }
+let autoResolvables = types.protocols.filter{hasUniqueNonMockImplementation($0)}
 
 outln("//We can create\(autoCreatables.map{$0.name})")
 outln("//We can resolve\(autoResolvables.map{$0.name})")
@@ -192,7 +189,7 @@ for type in wantsToInject{
 
 
 
-let regsText = regs.map{"    " + $0 + "\n"}.joined()
+let regsText = regs.map{"        " + $0 + "\n"}.joined()
 
 
 outln("""
