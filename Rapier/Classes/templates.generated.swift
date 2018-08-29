@@ -1,6 +1,5 @@
-// Generated using Sourcery 0.13.1 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.14.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
-
 
 
 
@@ -23,7 +22,7 @@ open class AppFactory{
 	}
 	
 	func make<P>(_ imp: P.Type) -> P{
-		return self.container.resolve(P.self)
+		return self.container.resolve(P.self)!
 	}
 }
 

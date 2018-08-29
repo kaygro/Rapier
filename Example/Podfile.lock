@@ -1,23 +1,27 @@
 PODS:
-  - Rapier (0.0.1):
+  - Rapier/AutoIntegrate (0.0.1):
     - Sourcery
+    - Swinject
   - Sourcery (0.14.0)
+  - Swinject (2.4.1)
 
 DEPENDENCIES:
-  - Rapier (from `../`)
+  - Rapier/AutoIntegrate (from `../`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Sourcery
+    - Swinject
 
 EXTERNAL SOURCES:
   Rapier:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Rapier: 4e57707e6834f1ebd8327673edf2231ad9ae7ec8
+  Rapier: 2760aa8ca54a8a7e3f9a9c325a8fddbaf9133e19
   Sourcery: 51332d15c2fc40e4ac5956e149a5d95607c63154
+  Swinject: f7f15a9672e99328c1f07f277091087917215700
 
-PODFILE CHECKSUM: 7cb6760d6ccde4eb17427e94262c1c64f20a62db
+PODFILE CHECKSUM: 52095c8163f8e9ea1c53dc84b0ce7e6bd0b92ee2
 
 COCOAPODS: 1.5.3

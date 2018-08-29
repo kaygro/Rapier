@@ -202,7 +202,7 @@ open class AppFactory{
 	}
 	
 	func make<P>(_ imp: P.Type) -> P{
-		return self.container.resolve(P.self)
+		return self.container.resolve(P.self)!
 	}
 }
 """)

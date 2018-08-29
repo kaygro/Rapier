@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 
-
 protocol CameraProtocol{
 	func takePhoto() -> UIImage
 }
@@ -23,6 +22,12 @@ class Phone: CameraProtocol{
 	}
 
 
+
+// sourcery:inline:auto:Phone.AutoInject
+//sourcery:Inject
+    init(){
+    }
+// sourcery:end
 }
 
 
@@ -33,6 +38,12 @@ protocol CarProtocol{}
 //sourcery:dependencies
 class Car: CarProtocol{
 
+
+// sourcery:inline:auto:Car.AutoInject
+//sourcery:Inject
+    init(){
+    }
+// sourcery:end
 }
 
 protocol PhotographerProtocol {
@@ -50,4 +61,15 @@ class Photographer: PhotographerProtocol{
 		return [self.camera.takePhoto()]
 	}
 
+
+// sourcery:inline:auto:Photographer.AutoInject
+    let camera: CameraProtocol
+    let car: CarProtocol
+//sourcery:Inject
+    init(camera: CameraProtocol, car: CarProtocol){
+        self.camera = camera
+        self.car = car
+    }
+// sourcery:end
 }
+

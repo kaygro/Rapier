@@ -20,35 +20,47 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 This pods purpose is to reduce the boilerplate that comes with using dependency
 injection. It generates an initializer for constructor/initializer injection
-and class members from a dependencies annotation
-(looks like '//sourcery:dependencies:Prot1,Prot2,...').
-Additionaly you get a generated AppFactory factory class,
-which has a function, that creates an object of a type implementing
-the given protocol. (For that to work, there must be exactly one type implementing
-that protocol, whose name does not begin with Mock.)
+and class members from a dependencies annotation in addition to a handy factory class.
+It uses sourcery for code generation and swinject to help build the object graph.
                        DESC
 
   s.homepage         = 'https://github.com/kaygro/Rapier'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'kaygro' => 'kay@dein-superheld.de' }
-  s.source           = { :git => 'https://github.com/kaygro/Rapier.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/kaygro/Rapier.git',
+												 :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Rapier/Templates/**/*'
-  
-  # s.resource_bundles = {
-  #   'Rapier' => ['Rapier/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Sourcery'
-	s.ios.script_phase = {
-		:name => 'Hello World',
-		:script => 'echo "Hello World"',
-		:execution_position => :before_compile
-	}
+	templates = 'Rapier/Templates/*.swifttemplate'
+	
+	s.source_files = templates
+   
+	s.dependency 'Swinject'
+	
+	script = <<~SCRIPT
+	sourcerycmd="$PODS_ROOT/Sourcery/bin/sourcery"
+	$sourcerycmd --templates "$PODS_TARGET_SRCROOT/Rapier/Templates" --sources "$SRCROOT" --exclude-sources "$SRCROOT/Rapier" --exclude-sources "$SRCROOT/Example/Pods"  --output "$PODS_TARGET_SRCROOT/Generated" --verbose
+	env
+	SCRIPT
+	
+	s.subspec 'AutoIntegrate' do |sp|
+		
+		sp.source_files = templates
+		sp.dependency 'Sourcery'
+		sp.ios.script_phase = {
+			:name => 'Hello World',
+			:script => script,
+			:execution_position => :before_compile
+		}
+		
+	end
+	
+	s.subspec 'Manual' do |sp|
+		sp.source_files = templates
+	end
+	
+	s.default_subspecs = 'Manual'
 end

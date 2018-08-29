@@ -17,8 +17,15 @@ Rapier is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```
+pod 'Rapier/AutoIntegrate'
+```
+This is the 'betteries included' variant. (Doesn't work yet)
+If you don't like the default integration, just add
+
+```
 pod 'Rapier'
 ```
+to your project, but you need to setup your sourcery integration manually.
 
 ## Author
 
