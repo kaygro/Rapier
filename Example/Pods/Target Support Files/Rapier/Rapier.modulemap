@@ -1,6 +1,0 @@
-framework module Rapier {
-  umbrella header "Rapier-umbrella.h"
-
-  export *
-  module * { export * }
-}
