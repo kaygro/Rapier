@@ -15,7 +15,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 Rapier is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
-
+(not supported yet)
 ```
 pod 'Rapier/AutoIntegrate'
 ```
@@ -26,6 +26,8 @@ If you don't like the default integration, just add
 pod 'Rapier'
 ```
 to your project, but you need to setup your sourcery integration manually.
+Note: This pods uses swifttemplates, which aren't supported by the hoenrew release of sourcery.
+(Use the sourcery release tap instead, or include sourcery via cocoapods.)
 
 ## Author
 
