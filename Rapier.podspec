@@ -46,6 +46,7 @@ It uses sourcery for code generation and swinject to help build the object graph
 	env
 	SCRIPT
 	
+	#Currently not supported
 	s.subspec 'AutoIntegrate' do |sp|
 		
 		sp.source_files = templates
