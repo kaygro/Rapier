@@ -1,8 +1,8 @@
 PODS:
-  - Rapier (0.0.1):
-    - Rapier/Manual (= 0.0.1)
+  - Rapier (0.0.2):
+    - Rapier/Manual (= 0.0.2)
     - Swinject
-  - Rapier/Manual (0.0.1):
+  - Rapier/Manual (0.0.2):
     - Swinject
   - Swinject (2.4.1)
 
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Rapier: 2760aa8ca54a8a7e3f9a9c325a8fddbaf9133e19
+  Rapier: 560faeceb51f5c81ba27908dfd84714955198674
   Swinject: f7f15a9672e99328c1f07f277091087917215700
 
 PODFILE CHECKSUM: 7cb6760d6ccde4eb17427e94262c1c64f20a62db

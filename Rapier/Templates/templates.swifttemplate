@@ -169,13 +169,18 @@ var regs = [String]()
 for type in autoResolvables{
 	var reg = "self.container.register(\(type.name).self)"
 	var paramList = ""
-	for dep in dependencies(of: uniqueNonMockImplementation(of: type)){
+	let implementation = uniqueNonMockImplementation(of: type)
+	for dep in dependencies(of: implementation){
 		paramList += "\(memberName(of: dep)): r.resolve(\(dep).self)!,"  
 	}
 	if paramList.hasSuffix(","){
 		paramList.removeLast(1)
 	}
-	reg += " { r in \(uniqueNonMockImplementation(of: type).name)(\(paramList))}"
+	if autoCreatables.contains(implementation){
+		reg += " { r in \(implementation.name)(\(paramList))}"
+	}else{
+		reg += " { r in assertionFailure(\"Not enogh info(missing dependencies annotation) to autocreate type \(implementation.name)\")}"
+	}
 	regs.append(reg)
 }
 

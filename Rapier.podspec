@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Rapier'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'A dependency injection framework for swift.'
 
 # This description is used to generate tags and improve search results.
@@ -37,6 +37,7 @@ It uses sourcery for code generation and swinject to help build the object graph
 	s.swift_version = '4.0'
 
 	templates = 'Rapier/Templates/*.swifttemplate'
+	generated_files = 'Rapier/Generated/*.swift'
 	
 	s.source_files = templates
    
@@ -44,8 +45,11 @@ It uses sourcery for code generation and swinject to help build the object graph
 	
 	script = <<~SCRIPT
 	sourcerycmd="$PODS_ROOT/Sourcery/bin/sourcery"
-	$sourcerycmd --templates "$PODS_TARGET_SRCROOT/Rapier/Templates" --sources "$SRCROOT" --exclude-sources "$SRCROOT/Rapier" --exclude-sources "$SRCROOT/Example/Pods"  --output "$PODS_TARGET_SRCROOT/Generated" --verbose
 	env
+	prj=$(dirname "$PODS_ROOT")
+	targetname=$(basename "$prj")
+	targetdir="$prj/$targetname"
+	$sourcerycmd --templates "$PODS_TARGET_SRCROOT/Rapier/Templates" --sources "$targetdir" --exclude-sources "$PODS_ROOT" --output "$PODS_ROOT/../Generated" --verbose
 	SCRIPT
 	
 	#Currently not supported
@@ -54,7 +58,7 @@ It uses sourcery for code generation and swinject to help build the object graph
 		sp.source_files = templates
 		sp.dependency 'Sourcery'
 		sp.ios.script_phase = {
-			:name => 'Hello World',
+			:name => 'Compile Templates',
 			:script => script,
 			:execution_position => :before_compile
 		}
