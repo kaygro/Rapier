@@ -34,7 +34,7 @@ It uses sourcery for code generation and swinject to help build the object graph
 
   s.ios.deployment_target = '8.0'
 	
-	s.swift_version = '4.0'
+	#s.swift_version = '4.1'
 
 	templates = 'Rapier/Templates/*.swifttemplate'
 	generated_files = 'Rapier/Generated/*.swift'
