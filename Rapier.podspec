@@ -32,9 +32,9 @@ It uses sourcery for code generation and swinject to help build the object graph
 												 :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
 	
-	#s.swift_version = '4.1'
+	s.swift_version = '4.1'
 
 	templates = 'Rapier/Templates/*.swifttemplate'
 	generated_files = 'Rapier/Generated/*.swift'
@@ -43,29 +43,21 @@ It uses sourcery for code generation and swinject to help build the object graph
    
 	s.dependency 'Swinject'
 	
-	script = <<~SCRIPT
-	sourcerycmd="$PODS_ROOT/Sourcery/bin/sourcery"
-	env
-	prj=$(dirname "$PODS_ROOT")
-	targetname=$(basename "$prj")
-	targetdir="$prj/$targetname"
-	$sourcerycmd --templates "$PODS_TARGET_SRCROOT/Rapier/Templates" --sources "$targetdir" --exclude-sources "$PODS_ROOT" --output "$PODS_ROOT/../Generated" --verbose
-	SCRIPT
-	
-	#Currently not supported
 	s.subspec 'AutoIntegrate' do |sp|
 		
 		sp.source_files = templates
 		sp.dependency 'Sourcery'
-		sp.ios.script_phase = {
-			:name => 'Compile Templates',
-			:script => script,
-			:execution_position => :before_compile
-		}
+		
+		#Currently not supported
+		#	sp.ios.script_phase = {
+		#	:name => 'Compile Templates',
+		#	:script => script,
+		#	:execution_position => :before_compile
+		#}
 		
 	end
 	
-	s.subspec 'Manual' do |sp|
+		s.subspec 'Manual' do |sp|
 		sp.source_files = templates
 	end
 	

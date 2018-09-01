@@ -15,11 +15,27 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 Rapier is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
-(not supported yet)
+(not fully automatic yet)
 ```
 pod 'Rapier/AutoIntegrate'
 ```
-This is the 'betteries included' variant. (Doesn't work yet)
+This will also pull in sourcery, which is used for code generation.
+Then use the follwing script in a pre compile build phse:
+```
+sourcerycmd="$PODS_ROOT/Sourcery/bin/sourcery"
+normal_template_location="$PODS_ROOT/Rapier/Templates"
+example_template_location="$PODS_ROOT/../../Rapier/Templates"
+if [ -d "$normal_template_location" ]; then
+  template_location="$normal_template_location"
+else
+  template_location="$example_template_location"
+fi
+
+$sourcerycmd --templates "$template_location" --sources "$SRCROOT" --exclude-sources "$PODS_ROOT" --exclude-sources "$SRCROOT/PODS"  --output "$SRCROOT/Generated" --verbose
+```
+Your projects Sourceroot should contain a folder 'Generated'. Add it to your xcode project, done.
+
+
 If you don't like the default integration, just add
 
 ```

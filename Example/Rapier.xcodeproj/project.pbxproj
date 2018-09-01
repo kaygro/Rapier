@@ -133,6 +133,7 @@
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Rapier_Example" */;
 			buildPhases = (
 				4CF30873E8C8E0718199CC99 /* [CP] Check Pods Manifest.lock */,
+				CA684331213ACBD500CBC4E8 /* ShellScript */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
@@ -200,15 +201,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Rapier_Example-checkManifestLockResult.txt",
 			);
@@ -222,24 +219,33 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Rapier_Example/Pods-Rapier_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Rapier_Example/Pods-Rapier_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Rapier/Rapier.framework",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rapier.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Rapier_Example/Pods-Rapier_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Rapier_Example/Pods-Rapier_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		CA684331213ACBD500CBC4E8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sourcerycmd=\"$PODS_ROOT/Sourcery/bin/sourcery\"\nenv\nnormal_template_location=\"$PODS_ROOT/Rapier/Templates\"\nexample_template_location=\"$PODS_ROOT/../../Rapier/Templates\"\nif [ -d \"$normal_template_location\" ]; then\ntemplate_location=\"$normal_template_location\"\nelse\ntemplate_location=\"$example_template_location\"\nfi\n\n$sourcerycmd --templates \"$template_location\" --sources \"$SRCROOT\" --exclude-sources \"$PODS_ROOT\" --exclude-sources \"$SRCROOT/PODS\"  --output \"$SRCROOT/Generated\" --verbose\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
